@@ -1,0 +1,187 @@
+Authentication
+All endpoints except /api/auth/signup and /api/auth/login require JWT token authentication. To authenticate, include the generated access token in the Authorization header as follows:
+
+1) makefile
+
+Authorization: Bearer <your_access_token>
+Endpoints
+User Registration
+Purpose: Register a new user.
+Endpoint: POST /api/auth/signup
+Request Format:
+{
+  "username": "string",
+  "email": "string",
+  "password": "string"
+}
+Response Format:
+201 Created:
+json
+
+{
+  "message": "User created successfully"
+}
+400 Bad Request:
+json
+{
+  "message": "All fields are required"
+}
+400 Bad Request:
+json
+{
+  "message": "Email already exists"
+}
+
+
+2) User Login
+Purpose: Authenticate and generate JWT token.
+Endpoint: POST /api/auth/login
+Request Format:
+json
+
+{
+  "email": "string",
+  "password": "string"
+}
+Response Format:
+200 OK:
+json
+
+{
+  "access_token": "string"
+}
+401 Unauthorized:
+{
+  "message": "Invalid credentials"
+}
+
+
+3) Retrieve All Expense Categories
+Purpose: Get all expense categories for the authenticated user.
+Endpoint: GET /api/categories
+Response Format:
+200 OK:
+json
+
+[
+  "category_name_1",
+  "category_name_2",
+  ...
+]
+
+
+4) Add New Expense Category
+Purpose: Create a new expense category.
+Endpoint: POST /api/categories
+Request Format:
+json
+{
+  "name": "string"
+}
+Response Format:
+201 Created:
+json
+
+{
+  "message": "Category added successfully"
+}
+400 Bad Request:
+json
+{
+  "message": "Name is required"
+}
+
+
+
+5) Delete Expense Category
+Purpose: Delete an existing expense category.
+Endpoint: DELETE /api/categories/:category_id
+Response Format:
+200 OK:
+json
+{
+  "message": "Category deleted successfully"
+}
+404 Not Found:
+json
+{
+  "message": "Category not found"
+}
+
+
+6) Add New Expense
+Purpose: Add a new expense.
+Endpoint: POST /api/expenses
+Request Format:
+json
+{
+  "title": "string",
+  "date": "YYYY-MM-DD",
+  "amount": "float",
+  "category_id": "int"
+}
+Response Format:
+201 Created:
+json
+{
+  "message": "Expense added successfully"
+}
+400 Bad Request:
+json
+{
+  "message": "All fields are required"
+}
+
+
+7) Retrieve Paginated List of User's Expenses
+Purpose: Get a paginated list of user's expenses.
+Endpoint: GET /api/expenses
+Query Parameters:
+page: Page number (default: 1)
+per_page: Number of items per page (default: 10)
+Response Format:
+200 OK:
+json
+{
+  "expenses": [
+    {
+      "title": "string",
+      "date": "YYYY-MM-DD",
+      "amount": "float"
+    },
+    ...
+  ],
+  "total_pages": "int",
+  "current_page": "int"
+}
+
+
+8) Group User Expenses by Category
+Purpose: Retrieve grouped expenses by category for the authenticated user.
+Endpoint: GET /api/expenses/grouped
+Response Format:
+200 OK:
+json
+{
+  "category_id_1": [
+    {
+      "title": "string",
+      "date": "YYYY-MM-DD",
+      "amount": "float"
+    },
+    ...
+  ],
+  "category_id_2": [...],
+  ...
+}
+
+
+9)Retrieve Monthly Expense Data for a Specific Category
+Purpose: Retrieve monthly expense data for a specific category.
+Endpoint: GET /api/expenses/category/:category_id/monthly
+Response Format:
+501 Not Implemented:
+json
+{
+  "message": "This endpoint is under construction"
+}
